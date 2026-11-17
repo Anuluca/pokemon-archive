@@ -71,7 +71,7 @@ for (const collection of collections) {
       let text = await fs.readFile(path.join(source, file), 'utf8');
       text = text.replace(/\b(href|src|background|poster|data-src|data-original|action|value)=(['"])([^'"<>]*)\2/gi,
         (_, attribute, quote, value) => `${attribute}=${quote}${rewriteReference(value, file)}${quote}`);
-      text = text.replace(/url\(\s*(['"]?)([^)'"]+)\1\s*\)/gi,
+      text = text.replace(/\burl\(\s*(['"]?)([^)'"]+)\1\s*\)/gi,
         (_, quote, value) => `url(${quote}${rewriteReference(value, file)}${quote})`);
       // 同时覆盖脚本中已本地化的静态地址；不存在的动态路径不会被猜测或替换。
       text = text.replace(/(['"])([^'"\r\n]{1,4096})\1/g,

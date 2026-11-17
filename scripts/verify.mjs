@@ -14,7 +14,7 @@ async function visit(folder) {
     const relative = path.relative(dist, file).split(path.sep).join('/');
     const text = await fs.readFile(file, 'utf8');
     const refs = [...text.matchAll(/\b(?:href|src|background|poster|data-src|data-original)=(['"])([^'"<>]*)\1/gi)].map(m => m[2]);
-    refs.push(...[...text.matchAll(/url\(\s*['"]?([^)'"\s]+)['"]?\s*\)/gi)].map(m => m[1]));
+    refs.push(...[...text.matchAll(/\burl\(\s*['"]?([^)'"\s]+)['"]?\s*\)/gi)].map(m => m[1]));
     for (const ref of refs) {
       if (!ref || /^(?:[a-z][a-z\d+.-]*:|\/\/|#)/i.test(ref)) continue;
       let url;
