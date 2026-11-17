@@ -1,0 +1,13 @@
+{
+  "name": "pokemon-archive",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Historical Pokémon website archives, published as independent URL collections.",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "verify": "node scripts/verify.mjs",
+    "test": "npm run build && npm run verify"
+  },
+  "engines": { "node": ">=22" }
+}

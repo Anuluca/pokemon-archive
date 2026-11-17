@@ -1,0 +1,138 @@
+body {font-family:"宋体","Arial Narrow"; text-align:center; color:#333333;font-size:14px; }
+a{color:#4A4152;  text-decoration: none;}
+a:hover {color:#FF0000; text-decoration:underline;}
+/*****Reset*****/
+html, body, div, h1, h2, h3, h4, h5, h6, ul, ol, dl, li, dt, dd, p, blockquote, pre, form, fieldset, table, th, td{ margin: 0; padding: 0; } 
+#nobor{border:none;} 
+a, body, select {
+text-decoration:none;
+}
+li{list-style:none; overflow:hidden;}
+.clear{clear: both;}
+.clear6{clear: both; height:6px;}
+.clear10{clear:both; height:10px;}
+.clear18{clear:both; height:15px;}
+img{border:none;}
+.l{float:left;}
+.r{float:right;}
+.hd,.bd{clear:both; font-size:14px; line-height:22px;}
+.banner{clear: both; margin: 0px auto;}
+/*****style Elements*****/
+.nm1,.nm2,#Fod_listx dd,.AriticCeshi,.ArticTqccs{background:url(http://mat1.gtimg.com/kid/images/11newindex/diceng/jctj1.png) #FFFFFF no-repeat;}
+/*****body背景*****/
+.BdCatoon{background:url(http://mat1.gtimg.com/kid/images/11newindex/diceng/dc-ct2.jpg) 0 1px repeat-x;}
+/*****顶部背景*****/
+.ctoonT{background:url(http://mat1.gtimg.com/kid/images/11newindex/diceng/t2.jpg) no-repeat;}
+/*****面包屑承接背景*****/
+.ctoonTbg{background:url(http://mat1.gtimg.com/kid/images/11newindex/diceng/cbg.jpg) no-repeat;}
+/*****标题北京*****/
+.ctoTit{background:url(http://mat1.gtimg.com/kid/images/11newindex/diceng/title1.jpg) no-repeat;}
+/*****欣赏小工具背景*****/
+.ctoli li{background:url(http://mat1.gtimg.com/kid/images/11newindex/diceng/tools11.png) no-repeat; }
+/*****精彩推荐区*****/
+.CtJctj,.CtJctBottom,.CtPinglun{background:url(http://mat1.gtimg.com/kid/images/11newindex/diceng/jctj11.png) no-repeat;}
+.CtJctj{ background-position:0 0;color:#821C06;}
+.CtJctj a{color:#821C06; margin:0 2px;}
+.CtJctj a:hover{color:#FF0000; }
+.CtJctjBd{border-left:2px solid #F4AA51;border-right:2px solid #F4AA51; min-height:30px;}
+.CtJctBottom{ background-position:0 -48px; }
+/*****评论*****/
+.CtPinglun{background-position:0 -57px;}
+.CtPinglun{color:#692400;}
+/*****Basic Elements*****/
+.TShow{ width:960px; height:152px; margin:-78px auto 0; position:relative;}
+.TShow .back{display:block;position:absolute;right:95px;top:98px;width:80px;height:20px;}
+.TShow .back a{display:block; width:80px; height:20px; text-indent:-9999em;}
+.conTBg{ min-height:500px; width:960px; margin:0 auto;} 
+.crumb{background:url(http://mat1.gtimg.com/kid/images/11newindex/diceng/con1.jpg) left center no-repeat; padding-left:20px; float:left; display:inline; margin:9px 0 0 55px; clear:both; color:#C36211; line-height:24px; font-size:12px;}
+.crumb a{color:#C36211; margin:0 5px;}
+.mainCon{width:630px; display:inline; margin:10px 0 0 20px;}
+.mainCon h1{font-size:16px; width:632px; height:32px; line-height:32px; margin: 0 auto;}
+.informa{ text-align:center; clear:both; padding:8px 10px 0; font-size:12px;}
+.informa span{ margin:0 10px;}
+.intro{width:606px; background:#FFFFFF; margin:10px auto 1px; text-align:left;line-height:25px;}
+.introt,.introb{background:url(http://mat1.gtimg.com/kid/images/11newindex/diceng/bg1.png) no-repeat;}
+.introt,.introb{width:606px; height:10px; clear:both; display:block;}
+.introt{ background-position:0 0;}
+.introb{background-position:0 -11px;}
+.jianjie{ background:url(http://mat1.gtimg.com/kid/images/11newindex/diceng/nt3.jpg) no-repeat; width:57px; height:24px; display:block; float:left; text-align:center; line-height:24px; margin:1px 10px 0px 20px; color:#FFFFFF; font-weight:bold;}
+.intro p{ margin:0 20px; color:#000000;}
+.flashHZ{border-top:1px dashed #CCCCCC; background:url(http://mat1.gtimg.com/kid/images/11newindex/diceng/flashHZ.jpg) no-repeat left bottom; width:564px; height:448px; margin:0px auto;}
+.flashcont{border: 1px solid #636C69; width:551px; height:420px; margin:15px auto; font-size:12px;}
+.toolsArtic{clear:both; width:580px; margin: 5px auto 0;}
+.toolsArtic li{width:98px; height:36px; float:left; display:inline; margin:0 9px;}
+.toolsArtic li a{background:url(http://mat1.gtimg.com/kid/images/11newindex/diceng/tools11.png) 0 -37px no-repeat; display:block; width:98px; height:36px; font-weight:bold; line-height:36px; text-align:center; color:#7D1B00;}
+.toolsArtic li a span{color:#FFFFFF;}
+.toolsArtic li a:hover{ background:url(http://mat1.gtimg.com/kid/images/11newindex/diceng/tools11.png) 0 0px no-repeat; text-decoration:none;}
+.AriticlTuijian{ width:616px;}
+.AriticlTuijian .hd{ width:616px; height:47px; line-height:47px; }
+.AriticlTuijian .AriticKinds{ float:right;  margin-right:15px; font-weight:100;}
+.AriticlTuijian .Bojctj{ font-size:16px; float:left; margin-left:30px; display:inline;}
+.AriticlTuijian .bd{ }
+.AriticlTuijian .BdBottom{width:616px; height:8px; line-height:0; font-size:0; }
+.ATul{ margin:0 10px; padding:10px 0; background:url(http://mat1.gtimg.com/kid/images/11newindex/diceng/jctjBg.jpg) left 130px no-repeat; height:250px;}
+.ATul a{color:#000000;}
+.ATul a:hover{color:#FF0000;}
+.ATul li{ width:25%; float:left; margin:5px auto 8px; padding:5px 0; font-size:12px;}
+.ATul li:hover{ background:#F1F9D4;}
+.ATul .AriticelImg{ border:1px solid #D5D5D7; padding:1px; background:#FFFFFF; clear:both; width:100px; height:75px; margin:0 auto;} 
+.ATul .AriticelTxt{  display:block; line-height:22px; height:22px; overflow:hidden; margin:4px 21px 0; }
+.AriticelPinglun{ width:621px; height:32px; line-height:32px; margin:0 0 5px;_margin:0 0 5px; text-align:left;}
+.AriticelPinglun strong{font-size:14px; margin-left:30px;}
+.AritiSide{ width:274px; display:inline; margin-right:10px;}
+#Fod_listx{margin-top:10px;}
+#Fod_listx dt{clear:both; height:25px; width:100%; cursor:pointer; font-family:"微软雅黑";}
+
+.nm1{background-position:-1px -90px; color:#791B00; font-weight:bold;}
+.nm2{background-position:0 -116px;font-weight:bold;color:#791B00;}
+#Fod_listx dt span{display:block; width:50%; float:left; line-height:25px; height:25px;}
+#Fod_listx dd{background-position:0 -142px;width:100%; height:530px; overflow:hidden;}
+.undis{display:none;}
+.MoreOther{ margin:0 10px; }
+.MoreOther a{color:#000000;}
+.MoreOther a:hover{color:#FF0000;}
+.MoreOther li{ width:50%; float:left; margin:18px auto 0px; padding:5px 0; font-size:12px;}
+.MoreOther .AriticelImg{ border:1px solid #D5D5D7; padding:1px; background:#FFFFFF; clear:both; width:100px; height:75px; margin:0 auto;}
+.MoreOther .AriticelImg:hover{border:1px solid #FF6600;} 
+.MoreOther .AriticelTxt{  display:block; line-height:22px; height:22px; overflow:hidden; margin:4px 21px 0; }
+.AriticCeshi{background-position:-276px -90px; width:274px; height:178px; clear:both; margin-top:30px;}
+.AriticCeshi .hd a{color:#7C1A00;}
+.AriticCeshi .hd a:hover{color:#FF0000;}
+.AriticCeshi .hd{height:25px; line-height:25px; color:#7C1A00;}
+.AriticCeshi .hd strong{ margin:2px 0 0 15px; font-size:15px; float:left;}
+.AriticCeshi .hd span{font-weight:100; font-size:11px; font-family:"宋体"; float:right; margin-right:10px;}
+.AriticCeshi .bd{clear:both;}
+.AriticCeshi .listCeshi{clear:both; margin:10px 20px;}
+.AriticCeshi .listCeshi li{ background:url(http://mat1.gtimg.com/kid/images/11newindex/diceng/con11.jpg) left center no-repeat; padding-left:15px; clear:both; height:24px; line-height:24px; overflow:hidden; text-align:left;}
+.ArticTqccs{background-position:-277px -270px; width:266px; height:484px; clear:both; margin-top:30px; }
+.ArticTqccs .ulArtic{ float:left; margin:70px 0 0 10px;width:240px; }
+.ArticTqccs .ulArtic li{float:left; width:50%; margin-bottom:10px;display:block; }
+.ArticTqccs .ulArtic .pImg{background:url(http://mat1.gtimg.com/kid/images/11newindex/cton/rRbg1.jpg) no-repeat; width:71px; height:85px; clear:both;display:block; margin:0 auto;}
+.ArticTqccs .ulArtic .pImg img{margin:6px auto;}
+.ArticTqccs .ulArtic .spanTx{display:block; clear:both; margin:6px 20px; font-size:12px; height:20px; line-height:20px; overflow:hidden;}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+ /*  |xGv00|e4988c7d593682ffaaf60b9ce16698e6 */

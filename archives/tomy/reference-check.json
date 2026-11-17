@@ -1,0 +1,11 @@
+{
+  "rendered_pages": 20,
+  "primary_pages": 5,
+  "primary_img_elements": 111,
+  "primary_broken_or_placeholder_images": 0,
+  "failed_actual_image_requests": [],
+  "checked_local_references": 860,
+  "broken_local_references": [],
+  "original_checksums_verified": 372,
+  "note": "关联页中的明确 missing 占位图不视为取回原图；无 src 的脚本占位 img 不视为资源请求。"
+}

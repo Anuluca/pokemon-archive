@@ -1,0 +1,135 @@
+*{overflow-x:hidden;}
+body,td{
+	margin:0;
+	padding:0;
+	font-size:12px;
+	line-height:150%;
+	color: #000;
+	background:#fff; 
+}
+dd,dt,p{padding:0;margin:0;}
+a:link {color:#000;text-decoration:none;}
+a:visited {color:#000;text-decoration:none;}
+a:hover {color:red;text-decoration:underline;}
+a:active {color:#000;text-decoration:underline;}
+form{margin:0;padding:0;}
+.t{color:#226EB1;}
+.b{font-weight:bold;}
+#Comment{
+	font-size:12px;
+	line-height:23px;
+	padding:5px 1px;
+	clear:both;
+}
+#Post{ 
+	clear:both;
+	width:99%; 
+	margin:4px auto 0 auto;
+	background:#fff; 
+	border:1px solid #cdcdcd;
+	border-bottom:0;
+	padding:10px 0 0 0;
+}
+#Submit{
+	clear:both;
+	width:99%;
+	margin:0 auto;	
+	border:1px solid #cdcdcd;
+	border-top:0;
+	padding:0 0 6px 0;
+}
+#Submit .in{border:1px solid #cdcdcd;float:right;margin:4px 12px 0 0;}
+#Submit textarea{width:94%;height:70px;}
+#login{margin:4px 8px;display:none}
+#Content{margin:4px 0;display:none}
+#b_login_post{margin-left:12px;}
+.sub{
+	width:66px; 
+	background:#F3F3F3;
+}
+/*帖子性质样式*/
+.reply_top{color:#3C78AD}
+.reply_commend{color:#3C78AD}
+.reply_expert{color:#3C78AD}
+/*评论内容*/
+.cmt{
+	width:99%;
+	border:1px solid #ccc;
+	margin:1px auto 0 auto;
+}
+.cmt dt{ 
+	background:#E4E4E4;
+	border-bottom:1px solid #cdcdcd;
+	font-size:12px;
+	line-height:25px;
+	padding-left:12px;
+}
+/*title*/
+.cmt dd.t{	
+	width:96%;
+	margin:3px auto 0 auto;
+} 
+/*post*/
+.cmt dd.p{ 
+	width:96%; 
+	margin:0 auto;
+	padding:2px 0 5px 0;
+	text-indent:24px;
+}
+/*repeat*/
+.cmt dd.r{
+	width:92%;
+	margin:5px auto 5px auto;
+	background:#fff;
+	border:1px solid #ccc;
+	color:#666;
+	display:none;
+	padding:6px;
+	font-size:12px;
+	line-height:150%;
+}
+.cmt dd.r p{text-indent:24px;}
+
+.i_count{float:left}
+.i_view	{
+	float:left;
+	clear:right;
+	margin-left:70px;
+	width:107px;
+	padding:0 4px;
+	background:url("../../mat1.qq.com/kid/images/final06/rttvd28.gif") no-repeat left top;
+	text-align:center;
+}
+#view_c_href{font-weight:normal}
+.i_count{margin-left:6px;}
+.i_anonymous{float:left;margin-left:4px;}
+.i_tips{float:left;}
+.i_titles{clear:both;margin-left:10px; display:none;}
+.p_title_div{
+	text-indent:24px;
+	background:url("../../mat1.qq.com/pinglun/images/dot_i.gif") repeat-x bottom;
+	width:100%;
+	color:#3C78AD;
+	margin:0 auto;
+} 
+.ins_text{
+	margin:0 auto;
+	padding:2px 4px;
+	border:1px solid #cdcdcd;
+	margin-left:10px;
+}
+#b_c_title{
+	border:1px solid #cdcdcd;
+	width:338px;
+	margin-top:3px;color:#969493;
+}
+#site_nav{
+	clear:both;
+	background:url("../../mat1.qq.com/pinglun/images/dot_i.gif") repeat-x bottom;
+	width:96%;
+	margin:0 auto 5px auto;
+	padding:0 0 4px 2px;
+	color:#3C78AD;
+	font-weight:bold;
+}
+#site_nav a{color:#3C78AD;}

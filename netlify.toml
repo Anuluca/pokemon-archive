@@ -1,0 +1,22 @@
+[build]
+  command = "npm run build && npm run verify"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "24"
+
+[[redirects]]
+  from = "/tomy"
+  to = "/tomy/"
+  status = 301
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+[[headers]]
+  for = "/tomy/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"
