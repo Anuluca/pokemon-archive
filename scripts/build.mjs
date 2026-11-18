@@ -1,11 +1,12 @@
 /**
  * 将各归档独立发布到 /<slug>/。
  * 原始归档保持不变；构建副本将所有已保存依赖映射到本集合，避免跨集合冲突。
- * 仅使用 Node.js 标准库，新集合无需增加框架或安装依赖。
+ * 使用 Node.js 生成静态文件，Acorn 负责安全改写旧脚本；新集合无需前端框架。
  */
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { rewriteJavaScript } from './rewrite-javascript.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const dist = path.join(root, 'dist');
@@ -45,7 +46,9 @@ for (const collection of collections) {
   const mapping = new Map();
   const restoration = await fs.readFile(path.join(source, 'restoration-2026-11-18.json'), 'utf8').then(JSON.parse).catch(() => ({records: []}));
   const additional = await fs.readFile(path.join(source, 'additional-pages.json'), 'utf8').then(JSON.parse).catch(() => ({records: [], pages: []}));
-  const records = [...restoration.records, ...additional.records];
+  const collectionManifest = collection.manifest
+    ? JSON.parse(await fs.readFile(path.join(source, collection.manifest), 'utf8')) : {records: []};
+  const records = [...restoration.records, ...additional.records, ...collectionManifest.records];
   const unavailable = new Set(records.filter(record => record.errors || record.status === 'missing').map(record => {
     const url = new URL(record.url);
     return `site/${url.hostname}${url.pathname}`;
@@ -70,7 +73,7 @@ for (const collection of collections) {
 
   // 只有能映射到实际归档文件的地址才改写；原站外链与 JavaScript 表达式保持原样。
   function rewriteReference(value, file) {
-    if (!value || /^(?:javascript:|data:|mailto:|#)/i.test(value)) return value;
+    if (!value || !value.trim() || /^(?:javascript:|data:|mailto:|#)/i.test(value)) return value;
     let url;
     try { url = new URL(value.replaceAll('&amp;', '&'), `https://archive.invalid/${file}`); }
     catch { return value; }
@@ -118,13 +121,41 @@ for (const collection of collections) {
       if (file.endsWith('/mi.MiniNav_110901V1.js') && /^\s*location\.href\s*=\s*['"]https:\/\/www\.qq\.com/.test(text)) {
         text = '// Archived mini navigation retired; automatic redirect disabled.\n';
       }
-      text = text.replace(/\b(href|src|background|poster|data-src|data-original|action|value)=(['"])([^'"<>]*)\2/gi,
-        (_, attribute, quote, value) => `${attribute}=${quote}${rewriteReference(value, file)}${quote}`);
-      text = text.replace(/\burl\(\s*(['"]?)([^)'"]+)\1\s*\)/gi,
-        (_, quote, value) => `url(${quote}${rewriteReference(value, file)}${quote})`);
-      // 同时覆盖脚本中已本地化的静态地址；不存在的动态路径不会被猜测或替换。
-      text = text.replace(/(['"])([^'"\r\n]{1,4096})\1/g,
-        (_, quote, value) => `${quote}${rewriteReference(value, file)}${quote}`);
+      const isHtml = /\.(?:html?|shtml)$/i.test(file);
+      const rewriteScript = script => {
+        try { return rewriteJavaScript(script, value => rewriteReference(value, file)); }
+        catch (error) {
+          // 旧批次的无效脚本保持原样；杰外新归档必须通过语法检查。
+          if (slug === 'jiewai') throw new Error(`${file}: ${error.message}`);
+          return script;
+        }
+      };
+      const inlineScripts = [];
+      if (isHtml) {
+        // 脚本正文必须与 HTML 属性处理隔离，避免把正则或 HTML 字符串改坏。
+        text = text.replace(/(<script\b[^>]*>)([\s\S]*?)(<\/script>)/gi, (_, open, body, close) => {
+          const index = inlineScripts.push(rewriteScript(body)) - 1;
+          return `${open}__ARCHIVE_SCRIPT_${index}__${close}`;
+        });
+        text = text.replace(/\b(href|src|background|poster|data-src|data-original|data-mfp-src|data-background|action|value)=(['"])([^'"<>]*)\2/gi,
+          (_, attribute, quote, value) => `${attribute}=${quote}${rewriteReference(value, file)}${quote}`);
+      }
+      // 响应式图片候选与灯箱原图必须一起本地化，避免浏览器选中仍指向原站的候选图。
+      if (isHtml) text = text.replace(/\bsrcset=(['"])([^'"<>]*)\1/gi, (_, quote, value) => {
+        const candidates = value.split(',').filter(entry => !entry.includes('.missing.svg')).map(entry => {
+          const [url, ...descriptor] = entry.trim().split(/\s+/);
+          return [rewriteReference(url, file), ...descriptor].join(' ');
+        }).join(', ');
+        return `srcset=${quote}${candidates}${quote}`;
+      });
+      if (isHtml || file.endsWith('.css')) {
+        text = text.replace(/\burl\(\s*(['"]?)([^)'"]+)\1\s*\)/gi,
+          (_, quote, value) => `url(${quote}${rewriteReference(value, file)}${quote})`);
+        text = text.replace(/@import\s+(['"])([^'"]+)\1/gi,
+          (_, quote, value) => `@import ${quote}${rewriteReference(value, file)}${quote}`);
+      }
+      if (file.endsWith('.js')) text = rewriteScript(text);
+      if (isHtml) text = text.replace(/__ARCHIVE_SCRIPT_(\d+)__/g, (_, index) => inlineScripts[Number(index)]);
       if (/\.(?:html?|shtml)$/i.test(file)) {
         let formPolicy = '';
         if (additional.pages.some(page => page.localPath === file)) {
@@ -150,8 +181,11 @@ for (const collection of collections) {
             if (!destination) throw new Error(`Additional archive page missing: ${page.localPath}`);
             return `<a href="/${destination}${page.fragment ? `#${htmlEscape(page.fragment)}` : ''}">${htmlEscape(page.title)}</a>`;
           }).join('');
-          const footer = `<aside class="archive-supplement" aria-label="补充归档页面"><nav aria-label="补充页面链接">${extraLinks}</nav><footer><p>${archiveStatement}</p><p>${projectLinks}</p></footer></aside>`;
-          text = text.replace(/<\/body>/i, footer + '</body>');
+          const otherCollections = collections.filter(entry => entry.slug !== slug)
+            .map(entry => `<a href="/${entry.slug}/">${htmlEscape(entry.shortTitle || entry.title)}</a>`).join('');
+          const footer = `<aside class="archive-supplement" aria-label="补充归档页面"><nav aria-label="补充页面链接">${extraLinks}${otherCollections}</nav><footer><p>${archiveStatement}</p><p>${projectLinks}</p></footer></aside>`;
+          if (text.includes('<div id="archive-footer-slot"></div>')) text = text.replace('<div id="archive-footer-slot"></div>', footer);
+          else text = text.replace(/<\/body>/i, footer + '</body>');
         }
         if (/site\/www\.tomy\.cn\/toy\/pokemon\/(?:events\/)?step1\.php\.html$/.test(file)) {
           formPolicy = "; form-action 'none'";

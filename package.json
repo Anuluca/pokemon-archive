@@ -14,5 +14,8 @@
   },
   "dependencies": {
     "@ruffle-rs/ruffle": "0.7.1"
+  },
+  "devDependencies": {
+    "acorn": "8.15.0"
   }
 }

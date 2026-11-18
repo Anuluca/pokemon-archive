@@ -5,6 +5,17 @@
     "source": "archives/tomy",
     "homepage": "site/kid.qq.com/tomy/pokemon/index.html",
     "capturedAt": "2026-11-18",
-    "referenceSnapshot": "2015-03-17"
+    "referenceSnapshot": "2015-03-17",
+    "shortTitle": "腾讯 × 多美宝可梦专区"
+  },
+  {
+    "slug": "jiewai",
+    "title": "杰外动漫宝可梦专题",
+    "shortTitle": "杰外宝可梦专题",
+    "source": "archives/jiewai",
+    "homepage": "site/jya.cn/index.html",
+    "manifest": "manifest.json",
+    "capturedAt": "2026-11-18",
+    "referenceSnapshot": "2019-03-05"
   }
 ]

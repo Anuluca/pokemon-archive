@@ -36,3 +36,26 @@ for (const file of [base, new URL('../dist/', import.meta.url)]) {
   for (const link of ['https://github.com/Anuluca/pokemon-archive', 'https://anuluca.com/']) assert(entry.includes(`href="${link}"`), `Project footer link missing: ${link}`);
 }
 console.log('Verified three additional pages, footer navigation and project links.');
+
+// 杰外页与 TOMY 独立发布；灯箱/响应式资源也在通用本地引用检查范围内。
+const jiewaiBase = new URL('../dist/jiewai/', import.meta.url);
+const jiewai = await fs.readFile(new URL('index.html', jiewaiBase), 'utf8');
+assert(home.includes('href="/jiewai/">杰外宝可梦专题</a>'), 'Jiewai entry missing from TOMY footer');
+assert(jiewai.includes('href="/tomy/"'), 'TOMY return link missing from Jiewai');
+assert.equal((jiewai.match(/class="portfolio_entry_li"/g) || []).length, 6, 'Jiewai gallery entries lost');
+assert(jiewai.includes('节目信息') && jiewai.includes('超级愿望'), 'Jiewai historical text missing');
+assert(!/srcset=["'][^"']*http:\/\/jya\.cn\//.test(jiewai), 'Responsive candidate still depends on original host');
+const {Script} = await import('node:vm');
+async function checkJiewaiScripts(folder) {
+  for (const entry of await fs.readdir(folder, {withFileTypes: true})) {
+    const file = new URL(`${entry.name}${entry.isDirectory() ? '/' : ''}`, folder);
+    if (entry.isDirectory()) {if (entry.name !== 'originals') await checkJiewaiScripts(file);}
+    else if (entry.name.endsWith('.js')) new Script(await fs.readFile(file, 'utf8'), {filename: file.pathname});
+    else if (entry.name.endsWith('.css')) assert(!/content\s*:\s*["']\/jiewai\/assets\//.test(await fs.readFile(file, 'utf8')), 'CSS content token was rewritten as a file path');
+  }
+}
+await checkJiewaiScripts(jiewaiBase);
+for (const match of jiewai.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)) {
+  if (match[2].trim() && !/type=["']application\//.test(match[1])) new Script(match[2]);
+}
+console.log('Verified Jiewai collection, six gallery entries and executable JavaScript syntax.');

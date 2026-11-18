@@ -5,12 +5,14 @@
 | 集合 | 访问路径 | 当前内容 |
 | --- | --- | --- |
 | TOMY | `/tomy/` | 腾讯儿童 × 多美宝可梦专区 |
+| 杰外 | `/jiewai/` | 杰外动漫宝可梦专题（2019-03-05） |
 
 ## 仓库结构
 
 ```text
 archives/
-  tomy/              # 已保存的离线归档、原始下载文件、资源清单
+  tomy/              # 腾讯 × 多美离线归档、原始下载文件、资源清单
+  jiewai/            # 杰外专题、不可变原件和独立清单
 collections.json     # 集合注册表；新增归档只需添加配置
 scripts/
   build.mjs          # 生成独立的集合路径，改写本地资源链接
@@ -35,16 +37,16 @@ Netlify 连接本仓库的 `main` 分支，构建命令和发布目录由 `netli
 - 发布目录：`dist`
 - 自定义域名：`pokemon-archive.anuluca.com`
 
-## 以后新增杰外归档
+## 以后新增归档
 
-1. 将完成的离线归档放进 `archives/jiewai/`。
+1. 将完成的离线归档放进 `archives/<集合名>/`。
 2. 在 `collections.json` 加入一个集合，填写原始首页的仓库相对路径，例如：
 
 ```json
 {
-  "slug": "jiewai",
-  "title": "杰外宝可梦网站归档",
-  "source": "archives/jiewai",
+  "slug": "example",
+  "title": "新的网站归档",
+  "source": "archives/example",
   "homepage": "site/原域名/index.html",
   "capturedAt": "实际归档日期",
   "referenceSnapshot": "历史快照日期"
@@ -53,7 +55,7 @@ Netlify 连接本仓库的 `main` 分支，构建命令和发布目录由 `netli
 
 3. 运行 `npm test`，检查本地资源引用。向 `main` 推送后，由 Netlify 自动发布。
 
-构建脚本将集合首页发布到 `/jiewai/`，同目录的其他 HTML 页面保留文件名；其他页面、资源和原件分别隔离保存，不影响 `/tomy/`。
+构建脚本将集合首页发布到 `/<slug>/`，同目录的其他 HTML 页面保留文件名；其他页面、资源和原件分别隔离保存，不影响 `/tomy/`。
 
 ## 归档范围与限制
 
@@ -88,3 +90,13 @@ TOMY 集合保存 16 个原始 HTML 页面和 311 个图片文件。主站五个
 页面依赖与原站无关的广告统计脚本已从浏览副本移除；原件保持不变。无法取回的图片使用明确标记的占位，缺失按钮可用文字控件浏览，所有失败请求记录于补充清单，不冒充已取回的原文件。
 
 归档首页与根目录增加说明：“本站仅用于互联网失传媒体的保存与归档，不用于任何商业用途。”同时提供 [GitHub](https://github.com/Anuluca/pokemon-archive) 和 [Anutrium](https://anuluca.com/) 链接。
+
+## 杰外专题归档
+
+`/jiewai/` 保存用户提供的 [2019-03-05 专题快照](https://web.archive.org/web/20190305200502/http://jya.cn/?page_id=394)。正文为原站的介绍、节目信息和六个系列展示项；原始 HTML 与静态资源放在 `archives/jiewai/originals/`，浏览副本在 `site/`，来源、哈希、可用资源和缺失记录在 `manifest.json`。
+
+TOMY 首页底部链接栏自动加入“杰外宝可梦专题”，杰外页底部可返回 TOMY 集合；根目录同时显示两个集合。每个集合的页面、图片、脚本和原件分别位于各自的路径下。
+
+浏览副本移除与内容展示无关的 Feed、REST 和 emoji 检测；响应式图片候选和灯箱地址随资源一起本地化。原件保持下载字节。部分灯箱原图或插件装饰资源未取回时，清单保留缺失状态。
+
+杰外清单本次保存 123 个文件，另记录 28 个未取回的资源候选；包括六个灯箱原图地址。`report.html` 提供逐项来源与原件下载。构建使用 Acorn 按 JavaScript 语法树改写静态字符串，保留旧脚本的正则表达式和 HTML 拼接；集合链接执行完整页面导航，避免 Samba 的 WordPress 局部加载拦截。

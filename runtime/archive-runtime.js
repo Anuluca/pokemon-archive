@@ -16,6 +16,15 @@
     return window;
   };
 
+  // 某些旧主题会拦截同域链接以局部加载页面；归档集合之间统一执行完整导航。
+  document.addEventListener('click', event => {
+    const link = event.target.closest?.('.archive-supplement a[href]');
+    if (!link || event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    window.location.assign(link.href);
+  }, true);
+
   // 原站全屏按钮直接打开 SWF，现代浏览器会下载文件；改用现有播放器的全屏功能。
   document.addEventListener('click', event => {
     const link = event.target.closest?.('a');
