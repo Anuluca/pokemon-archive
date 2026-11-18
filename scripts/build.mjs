@@ -48,6 +48,8 @@ for (const collection of collections) {
     else if (file.startsWith('site/')) {
       target = `${slug}/${/\.(?:html?|shtml)$/i.test(file) ? 'pages' : 'assets'}/${file.slice(5)}`;
     } else target = `${slug}/${file}`;
+    // 使用新文件名，避免访客仍缓存着旧版腾讯首页跳转脚本（assets 缓存一小时）。
+    if (file.endsWith('/mi.MiniNav_110901V1.js')) target = target.replace(/\.js$/, '.archive.js');
     mapping.set(file, target);
   }
 
