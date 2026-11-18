@@ -18,7 +18,8 @@
       "title": "有奖竞猜活动介绍",
       "sourceUrl": "http://www.tomy.cn/toy/pokemon/events/event.php",
       "snapshot": "https://web.archive.org/web/20130325001130/http://www.tomy.cn/toy/pokemon/events/event.php",
-      "localPath": "site/www.tomy.cn/toy/pokemon/events/event.php.html"
+      "localPath": "site/www.tomy.cn/toy/pokemon/events/event.php.html",
+      "showInFooter": false
     }
   ],
   "records": [

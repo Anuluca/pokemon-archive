@@ -14,7 +14,7 @@ const collections = JSON.parse(await fs.readFile(path.join(root, 'collections.js
 const toPosix = value => value.split(path.sep).join('/');
 const htmlEscape = value => String(value).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('"', '&quot;');
 const archiveStatement = '本站仅用于互联网失传媒体的保存与归档，不用于任何商业用途。';
-const projectLinks = '<a href="https://github.com/Anuluca/pokemon-archive">GitHub</a> · <a href="https://anuluca.com/">Anutrium</a>';
+const projectLinks = '<a href="https://github.com/Anuluca/pokemon-archive">GitHub</a>';
 
 async function filesIn(folder, relative = '') {
   const result = [];
@@ -172,18 +172,18 @@ for (const collection of collections) {
         text = text.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, script =>
           script.includes('mi.MiniNav_110901V1') ? '' : script);
         if (file === homepage) {
-          // 首页底部的“有奖竞猜”图片原先指向介绍文章，现接通用户提供的实际答题页。
+          // 竞猜图片先进入活动介绍，再由活动介绍进入答题、信息填报流程。
           text = text.replace(/<a\b[^>]*>\s*(<img\b[^>]*src=["'][^"']*\/ivent\.jpg["'][^>]*>)\s*<\/a>/gi,
-            `<a href="/${slug}/pages/www.tomy.cn/toy/pokemon/events/step1.php.html">$1</a>`);
+            `<a href="/${slug}/pages/www.tomy.cn/toy/pokemon/events/event.php.html">$1</a>`);
           // 补充页面单独列出，不改变历史页面中的原始导航和版权栏。
-          const extraLinks = additional.pages.map(page => {
+          const extraLinks = additional.pages.filter(page => page.showInFooter !== false).map(page => {
             const destination = mapping.get(page.localPath);
             if (!destination) throw new Error(`Additional archive page missing: ${page.localPath}`);
             return `<a href="/${destination}${page.fragment ? `#${htmlEscape(page.fragment)}` : ''}">${htmlEscape(page.title)}</a>`;
           }).join('');
           const otherCollections = collections.filter(entry => entry.slug !== slug)
             .map(entry => `<a href="/${entry.slug}/">${htmlEscape(entry.shortTitle || entry.title)}</a>`).join('');
-          const footer = `<aside class="archive-supplement" aria-label="补充归档页面"><nav aria-label="补充页面链接">${extraLinks}${otherCollections}</nav><footer><p>${archiveStatement}</p><p>${projectLinks}</p></footer></aside>`;
+          const footer = `<aside class="archive-supplement" aria-label="补充归档页面"><nav aria-label="补充页面链接"><span class="archive-nav-label">其他页面归档：</span>${extraLinks}${otherCollections}</nav><footer><p>${archiveStatement}</p><p>${projectLinks}</p></footer></aside>`;
           if (text.includes('<div id="archive-footer-slot"></div>')) text = text.replace('<div id="archive-footer-slot"></div>', footer);
           else text = text.replace(/<\/body>/i, footer + '</body>');
         }
