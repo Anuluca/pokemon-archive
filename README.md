@@ -1,6 +1,6 @@
 # 宝可梦网站归档
 
-公开访问：https://pokemon-archive.anuluca.com/
+公开访问：https://pokemon-web-archive.netlify.app/
 
 | 集合 | 访问路径 | 当前内容 |
 | --- | --- | --- |
@@ -35,7 +35,8 @@ Netlify 连接本仓库的 `main` 分支，构建命令和发布目录由 `netli
 
 - 构建命令：`npm run build && npm run verify`
 - 发布目录：`dist`
-- 自定义域名：`pokemon-archive.anuluca.com`
+- Netlify 项目名：`pokemon-web-archive`
+- 默认域名：`pokemon-web-archive.netlify.app`；不绑定个人域名。
 
 ## 以后新增归档
 
