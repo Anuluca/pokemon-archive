@@ -26,6 +26,9 @@ async function filesIn(folder, relative = '') {
 // 只清理构建产物，不触碰 archives 中的归档原件。
 await fs.rm(dist, { recursive: true, force: true });
 await fs.mkdir(dist, { recursive: true });
+// 现代播放兼容层与 Ruffle 在所有集合之间共享。
+await fs.cp(path.join(root, 'runtime'), path.join(dist, 'shared'), { recursive: true });
+await fs.cp(path.join(root, 'node_modules/@ruffle-rs/ruffle'), path.join(dist, 'shared/ruffle'), { recursive: true, filter: source => !source.endsWith('.map') });
 const slugs = new Set();
 const summary = [];
 for (const collection of collections) {
@@ -69,6 +72,10 @@ for (const collection of collections) {
     await fs.mkdir(path.dirname(target), { recursive: true });
     if (!file.startsWith('originals/') && /\.(?:html?|shtml|css|js)$/i.test(file)) {
       let text = await fs.readFile(path.join(source, file), 'utf8');
+      // 腾讯已将旧迷你导航脚本替换为首页跳转；只禁用发布副本中的这一退役行为。
+      if (file.endsWith('/mi.MiniNav_110901V1.js') && /^\s*location\.href\s*=\s*['"]https:\/\/www\.qq\.com/.test(text)) {
+        text = '// Archived mini navigation retired; automatic redirect disabled.\n';
+      }
       text = text.replace(/\b(href|src|background|poster|data-src|data-original|action|value)=(['"])([^'"<>]*)\2/gi,
         (_, attribute, quote, value) => `${attribute}=${quote}${rewriteReference(value, file)}${quote}`);
       text = text.replace(/\burl\(\s*(['"]?)([^)'"]+)\1\s*\)/gi,
@@ -76,6 +83,23 @@ for (const collection of collections) {
       // 同时覆盖脚本中已本地化的静态地址；不存在的动态路径不会被猜测或替换。
       text = text.replace(/(['"])([^'"\r\n]{1,4096})\1/g,
         (_, quote, value) => `${quote}${rewriteReference(value, file)}${quote}`);
+      if (/\.(?:html?|shtml)$/i.test(file)) {
+        // 原站移动端跳转会将归档文章送往已退役的 xw.qq.com，保留桌面归档正文。
+        text = text.replace(/<script\b[^>]*>([\s\S]*?)<\/script>/gi, (script, body) =>
+          body.includes('#TencentContent') && body.includes('navigator.userAgent') ? '' : script);
+        // 旧二维码函数名 Request 会覆盖浏览器 Fetch API 构造器，导致 Ruffle 请求变成 [object Object]。
+        text = text.replace(/<script\b[^>]*>([\s\S]*?)<\/script>/gi, (script, body) =>
+          /function\s+Request\s*\(/.test(body) && body.includes('qrcode/gen.php')
+            ? script.replace(/\bRequest\s*\(/g, 'archiveQrCodeRequest(') : script);
+        // 所有默认导航改到当前标签页；动态 window.open 由兼容层接管。
+        text = text.replace(/(<(?:a|form|base)\b[^>]*?)\s+target=(['"])[^'"]*\2/gi, '$1');
+        // 仅允许同源 Flash/WASM 资源请求；腾讯视频使用其 HTTPS HTML5 播放页。
+        text = text.replace(/<meta\b(?=[^>]*http-equiv=["']Content-Security-Policy["'])[^>]*>/gi, '');
+        const policy = "default-src 'self' data: blob: 'unsafe-inline' 'unsafe-eval'; connect-src 'self'; frame-src 'self' https://v.qq.com; object-src 'self'; worker-src 'self' blob:";
+        const compatibility = `<meta http-equiv="Content-Security-Policy" content="${policy}"><link rel="stylesheet" href="/shared/archive-runtime.css"><script src="/shared/archive-runtime.js" data-archive-collection="${slug}" defer></script>`;
+        text = text.replace(/<head\b[^>]*>/i, match => match + compatibility);
+        if (!/<head\b/i.test(text)) text = compatibility + text;
+      }
       await fs.writeFile(target, text);
     } else await fs.copyFile(path.join(source, file), target);
     copied++;

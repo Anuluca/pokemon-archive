@@ -9,5 +9,10 @@
     "verify": "node scripts/verify.mjs",
     "test": "npm run build && npm run verify"
   },
-  "engines": { "node": ">=22" }
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "@ruffle-rs/ruffle": "0.7.1"
+  }
 }
