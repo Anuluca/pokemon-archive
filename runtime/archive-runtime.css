@@ -23,3 +23,5 @@
 .archive-supplement a:hover{color:#b74712}
 .archive-supplement footer p{margin:6px 0}
 .archive-enter-event{box-sizing:border-box;display:inline-block;width:115px;height:42px;border:2px solid #fff;border-radius:8px;background:#ffd13d;color:#185b90;text-align:center;font:bold 18px/38px system-ui;box-shadow:0 1px 4px #777}
+/* 原站的 a:link/a:visited 在页面后部声明，显式保留新增导航的链接颜色与下划线。 */
+.archive-supplement a:link,.archive-supplement a:visited{color:#075f96;text-decoration:underline}
