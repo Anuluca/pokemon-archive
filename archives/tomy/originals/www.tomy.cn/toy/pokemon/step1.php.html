@@ -1,0 +1,223 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>tomy-plll 精灵宝可梦官网 活动介绍</title>
+	<script type="text/javascript" src="./js/jquery-1.7.1.min.js"></script>
+
+	<link type="text/css" href="style/global.css" rel="stylesheet" />
+	<link rel="shortcut icon" href="favicon.ico" />
+</head>
+<body>
+	<div class="root">
+		<!-- Header -->
+		<div class="header clearfix">
+		    <a href='index.php'><h1></h1></a>
+		    <h2></h2>
+		</div>
+
+        <div class="index">
+
+		<div class="bg-top"></div>
+		<div class="bg-title"><h1>填写以下个人信息，即可参与问答赢取奖品，我们将在全部问题回答正确的参与者中抽取10名中奖者(请确认个人信息正确，以便获奖后工作人员与你取得联系哦！)</h1></div>
+		<form action="step2.php"  method="post" id='infomationform' onsubmit='return checkform();'>
+		<div class="bg-body">
+			<div class="main-wrap">
+				<div class='files z'>
+					<div class='file'>
+						<div class='z' style='width:50%'>
+							<div class='file'>
+								<div class='q-title'>姓名<span></span></div>
+								<div class='putfile'><input type='text' class='text' name='xingming' value=''></div>
+							</div>
+						</div>
+						<div class='z' style='width:50%'>
+							<div class='file'>
+								<div class='q-title'>性别<span></span></div>
+								<div class='putfile xingbie'>
+																<input type='radio' class='radio' name='xingbie' checked value='男'>
+																<span>男</span>
+																	<input type='radio' class='radio'  name='xingbie' value='女'>
+																<span>女</span>
+								
+								</div>
+							</div>
+						
+						</div>
+						<div class='cl'></div>
+					</div>
+
+
+
+
+
+					<div class='file'>
+						<div class='q-title'>生辰年月<span></span></div>
+						<div class='putfile shengri'><input type='text' class='shorttext' name='nian' value=''><span>年</span><input type='text' class='shorttext' name='yue' value=''><span>月</span><input type='text' class='shorttext' name='ri' value=''><span>日</span></div>
+					</div>
+
+
+					<div class='file'>
+						<div class='q-title selectcity'>城市<span></span></div>
+						<div class='putfile putfile' style='border:0;'>
+							<select name='sctiy' class='sctiy'>
+																								<option value='请选择城市'>请选择城市</option>
+																																<option value='北京'>北京</option>
+																																<option value='安徽'>安徽</option>
+																																<option value='福建'>福建</option>
+																																<option value='甘肃'>甘肃</option>
+																																<option value='广东'>广东</option>
+																																<option value='广西'>广西</option>
+																																<option value='贵州'>贵州</option>
+																																<option value='海南'>海南</option>
+																																<option value='河北'>河北</option>
+																																<option value='河南'>河南</option>
+																																<option value='黑龙江'>黑龙江</option>
+																																<option value='湖北'>湖北</option>
+																																<option value='湖南'>湖南</option>
+																																<option value='吉林'>吉林</option>
+																																<option value='江苏'>江苏</option>
+																																<option value='江西'>江西</option>
+																																<option value='辽宁'>辽宁</option>
+																																<option value='内蒙古'>内蒙古</option>
+																																<option value='宁夏'>宁夏</option>
+																																<option value='青海'>青海</option>
+																																<option value='山东'>山东</option>
+																																<option value='山西'>山西</option>
+																																<option value='陕西'>陕西</option>
+																																<option value='上海'>上海</option>
+																																<option value='四川'>四川</option>
+																																<option value='天津'>天津</option>
+																																<option value='西藏'>西藏</option>
+																																<option value='新疆'>新疆</option>
+																																<option value='云南'>云南</option>
+																																<option value='浙江'>浙江</option>
+																																<option value='重庆'>重庆</option>
+																																<option value='香港'>香港</option>
+																																<option value='澳门'>澳门</option>
+																																<option value='台湾'>台湾</option>
+																																<option value='海外'>海外</option>
+															
+							</select>
+							<span>选择海外时,请在详细地址中填写一下来自哪个国家</span>
+						
+						</div>
+					</div>
+
+
+
+
+
+					<div class='file'>
+						<div class='q-title'>详细地址<span></span></div>
+						<div class='putfile'><input type='text' class='text' name='zhuzhi'  value=''></div>
+					</div>
+					<div class='file'>
+						<div class='q-title'>联系电话<span></span></div>
+						<div class='putfile'><input type='text' class='text' name='lianxifangshi' value=''></div>
+					</div>
+
+
+				</div>
+
+				<div class='files y' >
+					<div class='file'>
+						<div class='q-title'>电子邮件<span></span></div>
+						<div class='putfile'><input type='text' class='text' name='email'  value=''></div>
+					</div>
+
+					<div class='file'>
+						<div class='q-title'>在哪购买精灵宝可梦产品？<span></span></div>
+						<div class='putfile'><input type='text' class='text' name='nalimai' value=''></div>
+					</div>
+					<div class='file'>
+						<div class='q-title'>最喜欢哪个精灵宝可梦？<span></span></div>
+						<div class='putfile'><input type='text' class='text' name='zuixihuan' value=''></div>
+					</div>
+					<div class='file'>
+						<div class='q-title'>在那里得知精灵宝可梦知识宝库信息的?<span></span></div>
+						<div class='putfile'><input type='text' class='text' name='baoku'  value=''></div>
+					</div>
+					<div class='file'>
+						<div class='submitfile'><input type="image" src="./images/next.png"  class="submit" alt="Submit" value="Submit"></div>
+					</div>
+				</div>
+				<div class='cl'></div>
+				<div style='padding:20px 370px 20px 0;'>
+					<p style=''>(*在本网站所记录的个人信息,TakaraTomy公司将为您保密,同时,在各种活动中的获奖者,TakaraTomy公司将以本人所记录的联系方式进行通知,所以请认真填写有效信息。填写非有效信息时，将无法参加抽奖等活动，敬请谅解!)</p>
+				</div>
+			</div>
+			</form>
+		
+		</div>
+
+		<div class="bg-bottom"></div>
+	</div>
+	<script language="javascript" type="text/javascript">
+		function checkform(){
+		var state = 0;
+			$('#infomationform input.text,#infomationform input.shorttext').each(function(){
+					$(this).css('background','#fff').parent().parent().find('.q-title span').html('');
+				if(!$(this).val()){
+					$(this).css('background','#c3e3f9').parent().parent().find('.q-title span').html('不能为空');
+
+					state=1;
+				}else{
+					if($(this).attr('name')=='email'){
+						$(this).css('background','#fff').parent().parent().find('.q-title span').html('');
+						if(checkemail($(this).val())==false){
+							$(this).css('background','#c3e3f9').parent().parent().find('.q-title span').html('错误');
+							state=1;
+						}
+
+					}
+				}
+			});
+
+			var cityvalue = $('#infomationform .sctiy').val();
+			if(cityvalue=='请选择城市'){
+				$('.selectcity span').html('请选择');
+				$('#infomationform .sctiy').css('background','#c3e3f9');
+				state=1;
+			
+			}else{
+				$('.selectcity span').html('');
+			}
+
+			if(state>0){
+				return false;
+			
+			}else{
+				return true;
+			}
+
+			
+
+		}
+
+		function checkemail(value){
+			var reg = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]+$/;
+			if (!reg.test(value)) {
+				return false;
+			}
+		}
+	</script>
+
+
+    <!-- Footer -->
+    <div class="copyright clearfix">
+    	<div class="icp">沪ICP11010869号</div>
+        <div class="info">©1997 Nintendo, Creatures, GAME FREAK, TV TOKYO, ShoPro, JR Kikaku<br />©Pokémon.</div>
+    </div>
+    <div class="footer-margin"></div>
+    <div class="footer">
+        <span>株式会社多美 中文官方网站</span><span><b>※</b>本网站可能刊登有未上市产品，实际销售种类以商场为准。</span>
+        <img src="images/bottomLogot.gif" width="446" height="41" />
+        <a style="display:block;width:49px;height:49px;position:relative;top:-6px;right:20px;float:right;" href="http://www.sgs.gov.cn/lz/licenseLink.do?method=licenceView&entyId=20120611164952782" target="_blank">
+        <img src="images/pricy.png" width="49" height="49" /></a></div>
+    </div>
+
+    <!--<div id="advimg"><a href="event.php"><img src="./images/adv.png" width="200" height="200" title="精灵宝可梦活动"/></a></div>-->
+
+</body>
+</html>

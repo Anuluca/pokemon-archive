@@ -6,7 +6,7 @@
   "description": "Historical Pokémon website archives, published as independent URL collections.",
   "scripts": {
     "build": "node scripts/build.mjs",
-    "verify": "node scripts/verify.mjs",
+    "verify": "node scripts/verify.mjs && node scripts/verify-restoration.mjs",
     "test": "npm run build && npm run verify"
   },
   "engines": {

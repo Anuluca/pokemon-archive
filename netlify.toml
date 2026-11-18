@@ -20,3 +20,13 @@
   for = "/tomy/assets/*"
   [headers.values]
     Cache-Control = "public, max-age=3600"
+
+[[headers]]
+  for = "/tomy/pages/*"
+  [headers.values]
+    Cache-Control = "no-cache"
+
+[[headers]]
+  for = "/shared/*"
+  [headers.values]
+    Cache-Control = "no-cache"

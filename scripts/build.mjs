@@ -41,6 +41,16 @@ for (const collection of collections) {
   if (!files.includes(homepage)) throw new Error(`Missing homepage for ${slug}: ${homepage}`);
   const primaryDirectory = path.posix.dirname(homepage);
   const mapping = new Map();
+  const restoration = await fs.readFile(path.join(source, 'restoration-2026-11-18.json'), 'utf8').then(JSON.parse).catch(() => ({records: []}));
+  const unavailable = new Set(restoration.records.filter(record => record.errors).map(record => {
+    const url = new URL(record.url);
+    return `site/${url.hostname}${url.pathname}`;
+  }));
+  function missingRestoredAsset(value, file) {
+    const url = new URL(value, `https://archive.invalid/${file}`);
+    const key = url.hostname === 'archive.invalid' ? url.pathname.slice(1) : `site/${url.hostname}${url.pathname}`;
+    return unavailable.has(key);
+  }
   for (const file of files) {
     let target;
     if (file === 'index.html') target = `${slug}/index.html`; // 旧入口是跳转壳，与真正首页共用映射。
@@ -48,20 +58,26 @@ for (const collection of collections) {
     else if (file.startsWith('site/')) {
       target = `${slug}/${/\.(?:html?|shtml)$/i.test(file) ? 'pages' : 'assets'}/${file.slice(5)}`;
     } else target = `${slug}/${file}`;
-    // 使用新文件名，避免访客仍缓存着旧版腾讯首页跳转脚本（assets 缓存一小时）。
+    // 已修复的依赖使用新文件名，避免浏览器继续使用旧缓存。
     if (file.endsWith('/mi.MiniNav_110901V1.js')) target = target.replace(/\.js$/, '.archive.js');
+    if (file.endsWith('/headnav.css')) target = target.replace(/\.css$/, '.restored.css');
     mapping.set(file, target);
   }
 
   // 只有能映射到实际归档文件的地址才改写；原站外链与 JavaScript 表达式保持原样。
   function rewriteReference(value, file) {
-    if (!value || /^(?:[a-z][a-z\d+.-]*:|\/\/|#)/i.test(value)) return value;
+    if (!value || /^(?:javascript:|data:|mailto:|#)/i.test(value)) return value;
     let url;
     try { url = new URL(value.replaceAll('&amp;', '&'), `https://archive.invalid/${file}`); }
     catch { return value; }
-    if (url.hostname !== 'archive.invalid') return value;
     let decoded;
-    try { decoded = decodeURIComponent(url.pathname.slice(1)); } catch { return value; }
+    try {
+      decoded = decodeURIComponent(url.pathname.slice(1));
+      if (url.hostname !== 'archive.invalid') {
+        decoded = `site/${url.hostname}/${decoded}`;
+        if (decoded.endsWith('.php')) decoded += '.html';
+      }
+    } catch { return value; }
     const target = mapping.get(decoded);
     return target ? `/${target}${url.search}${url.hash}` : value;
   }
@@ -74,6 +90,21 @@ for (const collection of collections) {
     await fs.mkdir(path.dirname(target), { recursive: true });
     if (!file.startsWith('originals/') && /\.(?:html?|shtml|css|js)$/i.test(file)) {
       let text = await fs.readFile(path.join(source, file), 'utf8');
+      if (text.includes('\0')) throw new Error(`Invalid text encoding: ${file}`);
+      if (file.startsWith('site/www.tomy.cn/')) {
+        // 未取回的装饰图不制造假原件。缺失状态保留在补充来源记录中，发布副本用文字控件降级。
+        if (file.endsWith('.css')) text = text.replace(/url\(\s*(['"]?)([^)'"\s]+)\1\s*\)/gi,
+          (match, quote, value) => missingRestoredAsset(value, file) ? 'none' : match);
+        if (file.endsWith('.html')) {
+          text = text.replace(/<link\b[^>]*href=["']favicon\.ico["'][^>]*>/gi, '');
+          text = text.replace(/<img\b[^>]*src=["']\.\/images\/title-([123])\.png["'][^>]*>/gi,
+            (_, number) => `<span class="archive-event-heading">${{1:'问卷调查',2:'提交表单',3:'有奖竞猜'}[number]}</span>`);
+          text = text.replace(/<input\b(?=[^>]*type=["']image["'])[^>]*>/gi,
+            '<button type="submit" class="submit archive-event-submit">提交</button>');
+          if (!file.includes('/events/')) text = text.replace(/src=["']\.\/js\/jquery-1\.7\.1\.min\.js["']/gi,
+            'src="events/js/jquery-1.7.1.min.js"');
+        }
+      }
       // 腾讯已将旧迷你导航脚本替换为首页跳转；只禁用发布副本中的这一退役行为。
       if (file.endsWith('/mi.MiniNav_110901V1.js') && /^\s*location\.href\s*=\s*['"]https:\/\/www\.qq\.com/.test(text)) {
         text = '// Archived mini navigation retired; automatic redirect disabled.\n';
@@ -86,6 +117,25 @@ for (const collection of collections) {
       text = text.replace(/(['"])([^'"\r\n]{1,4096})\1/g,
         (_, quote, value) => `${quote}${rewriteReference(value, file)}${quote}`);
       if (/\.(?:html?|shtml)$/i.test(file)) {
+        let formPolicy = '';
+        // 退役的腾讯迷你导航完全从可浏览副本中移除，动态插入脚本也一并处理。
+        text = text.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, script =>
+          script.includes('mi.MiniNav_110901V1') ? '' : script);
+        if (file === homepage) {
+          // 首页底部的“有奖竞猜”图片原先指向介绍文章，现接通用户提供的实际答题页。
+          text = text.replace(/<a\b[^>]*>\s*(<img\b[^>]*src=["'][^"']*\/ivent\.jpg["'][^>]*>)\s*<\/a>/gi,
+            `<a href="/${slug}/pages/www.tomy.cn/toy/pokemon/events/step1.php.html">$1</a>`);
+        }
+        if (/site\/www\.tomy\.cn\/toy\/pokemon\/(?:events\/)?step1\.php\.html$/.test(file)) {
+          formPolicy = "; form-action 'none'";
+          const quiz = file.includes('/events/');
+          const next = `/${slug}/pages/www.tomy.cn/toy/pokemon/step1.php.html`;
+          text = text.replace(/<form\b[^>]*>/i,
+            `<p class="archive-event-notice">历史活动归档：活动已结束；填写内容不会上传或保存。${quiz ? '答题后点击提交可查看信息填报页。' : '本页仅供查看当年的填报流程。'}</p><form id="infomationform" data-archive-event-stage="${quiz ? 'quiz' : 'information'}" data-next-page="${next}">`);
+          text = text.replace(/<\/head>/i, '<script src="/shared/archive-event.js" defer></script></head>');
+          // 已下线的原站首页改回归档入口。
+          text = text.replace(/href=(["'])(?:http:\/\/www\.tomy\.cn\/toy\/pokemon\/)?index\.php\1/gi, `href="/${slug}/"`);
+        }
         // 原站移动端跳转会将归档文章送往已退役的 xw.qq.com，保留桌面归档正文。
         text = text.replace(/<script\b[^>]*>([\s\S]*?)<\/script>/gi, (script, body) =>
           body.includes('#TencentContent') && body.includes('navigator.userAgent') ? '' : script);
@@ -97,7 +147,7 @@ for (const collection of collections) {
         text = text.replace(/(<(?:a|form|base)\b[^>]*?)\s+target=(['"])[^'"]*\2/gi, '$1');
         // 仅允许同源 Flash/WASM 资源请求；腾讯视频使用其 HTTPS HTML5 播放页。
         text = text.replace(/<meta\b(?=[^>]*http-equiv=["']Content-Security-Policy["'])[^>]*>/gi, '');
-        const policy = "default-src 'self' data: blob: 'unsafe-inline' 'unsafe-eval'; connect-src 'self'; frame-src 'self' https://v.qq.com; object-src 'self'; worker-src 'self' blob:";
+        const policy = "default-src 'self' data: blob: 'unsafe-inline' 'unsafe-eval'; connect-src 'self'; frame-src 'self' https://v.qq.com; object-src 'self'; worker-src 'self' blob:" + formPolicy;
         const compatibility = `<meta http-equiv="Content-Security-Policy" content="${policy}"><link rel="stylesheet" href="/shared/archive-runtime.css"><script src="/shared/archive-runtime.js" data-archive-collection="${slug}" defer></script>`;
         text = text.replace(/<head\b[^>]*>/i, match => match + compatibility);
         if (!/<head\b/i.test(text)) text = compatibility + text;

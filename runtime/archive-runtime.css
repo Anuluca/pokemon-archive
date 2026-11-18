@@ -8,3 +8,10 @@
 .archive-flash-player{position:relative;display:inline-block;background:#fff;vertical-align:middle}
 .archive-flash-unavailable{display:flex;align-items:center;justify-content:center;flex-direction:column;box-sizing:border-box;padding:16px;border:1px solid #ddd;background:#fafafa;color:#666;font:14px/1.6 system-ui,sans-serif;text-align:center}
 .archive-flash-unavailable a,.archive-flash-player>a{color:#0759ad}
+
+/* 原始活动页面之外的归档状态提示，与历史正文和问卷样式区分。 */
+.archive-event-notice{box-sizing:border-box;max-width:900px;margin:16px auto;padding:10px 16px;background:#fff7d6;border:1px solid #d7bd72;color:#55451f;font:14px/1.6 system-ui;text-align:left}
+.archive-event-notice:empty{display:none}
+.archive-event-heading{display:inline-block;font-size:24px;font-weight:bold;color:#17648f}
+.submitfile .archive-event-submit{border:2px solid #fff;border-radius:9px;background:#198fcb;color:#fff;font:bold 20px/1.5 system-ui;cursor:pointer;box-shadow:0 1px 4px #777}
+.bg-title h1 .archive-event-heading{display:block;font-size:24px;line-height:1.6;color:#17648f}
