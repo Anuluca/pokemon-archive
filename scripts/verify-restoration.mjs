@@ -19,3 +19,20 @@ for (const [page, stage] of [['events/step1', 'quiz'], ['step1', 'information']]
   assert(!/<form\b[^>]*(?:action|onsubmit)=/i.test(text), `${stage}: retired submission endpoint returned`);
 }
 console.log('Verified restored navigation and historical event flow.');
+
+// 新增页面必须拥有真实原件；首页入口与活动锚点保持可追溯。
+const additional = JSON.parse(await fs.readFile(new URL('../archives/tomy/additional-pages.json', import.meta.url), 'utf8'));
+assert.equal(additional.pages.length, 3, 'Three user-supplied pages must be registered');
+for (const page of additional.pages) {
+  const destination = `pages/${page.localPath.slice(5)}`;
+  assert(home.includes(`href="/tomy/${destination}${page.fragment ? `#${page.fragment}` : ''}"`), `${page.title}: footer link missing`);
+  const published = await fs.readFile(new URL(destination, base), 'utf8');
+  assert(published.includes('<title>'), `${page.title}: archived page missing`);
+  if (page.fragment) assert(new RegExp(`(?:id|name)=["']${page.fragment}["']`).test(published), 'Activity anchor missing');
+}
+for (const file of [base, new URL('../dist/', import.meta.url)]) {
+  const entry = await fs.readFile(new URL('index.html', file), 'utf8');
+  assert(entry.includes('本站仅用于互联网失传媒体的保存与归档，不用于任何商业用途。'), 'Non-commercial archive statement missing');
+  for (const link of ['https://github.com/Anuluca/pokemon-archive', 'https://anuluca.com/']) assert(entry.includes(`href="${link}"`), `Project footer link missing: ${link}`);
+}
+console.log('Verified three additional pages, footer navigation and project links.');

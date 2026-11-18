@@ -1,0 +1,132 @@
+@charset "utf-8";
+/* CSS Document */
+html,body{-webkit-text-size-adjust:none;}
+body{color:#434343; font-size:12px; line-height:25px;}
+body, div, address, blockquote, iframe, ul, ol, dl, dt, dd, li, dl, h1, h2, h3, h4, h5, h6, p, pre, table, caption, th, td, form, legend, fieldset, input{margin:0; padding:0; font-weight: normal; font-style: normal; font-size: 100%; font-family:"宋体"; border:0; font-size:12px;}
+button, select,textarea{margin:0; padding:0; font-size:12px;}
+
+
+ul{ list-style:none;}
+a{ text-decoration:none; color:#434343;}
+a:hover{ color:#0065b1; text-decoration:underline; cursor:pointer;}
+
+.clearBoth{ clear:both;}
+input{ color:#000;}
+
+h1, h2, h3, h4, h5, h6 {
+	font-size:100%;
+}
+address, cite, dfn, em, var {
+	font-style:normal;
+}
+
+small {
+	font-size:12px;
+}
+
+legend {
+	color:#000;
+}
+fieldset, img {
+	border:0;
+}
+button, input, select, textarea {
+	font-size:100%;
+}
+.hide{
+	display:none;
+}
+.show{
+	display:block;
+}
+
+.colorA{ color:#FFF;}
+
+.fl{ float:left;}
+
+/*清除浮动类*/
+.clearfix:after {
+   content: ".";
+   display: block;
+   height: 0;
+   clear: both;
+   visibility: hidden;
+   font-size: 0;
+}
+.clearfix {display: inline-block; }
+
+* html .clearfix {height: 1%;}
+.clearfix {display: block;}
+.clearfix {zoom: 1;}
+.clear{ clear:both;}
+
+
+/*最外面框架*/
+#laybox{ width:1003px; margin:0 auto;}
+#layboxT{ width:1003px; height:115px; overflow:hidden;display:none;}
+#logo{ width:156px; height:115px; float:left;}
+.topBanner1{ float:left; width:305px;}
+.topBanner2{ float:left; width:542px;}
+
+#menuNav{ width:1003px; height:39px; overflow:hidden;display:none;}
+#NavRigh{ width:129px; float:left;}
+
+/*nav*/
+#nav{ width:874px; height:39px; background:url(../images/navBg.jpg) left top repeat-x; float:left;}
+#nav li{ float:left;}
+#nav span{ display:none;}
+#nav .n1 a{ width:125px; height:39px; background:url(../images/navT.png) left top no-repeat; display:block;}
+#nav .n1 a:hover{ width:125px; height:39px; background:url(../images/navT.png) left -195px no-repeat; display:block;}
+#nav .n2 a{ width:132px; height:39px; background:url(../images/navT.png) left -39px no-repeat; display:block;}
+#nav .n2 a:hover{ width:132px; height:39px; background:url(../images/navT.png) left -234px no-repeat; display:block;}
+#nav .n3 a{ width:128px; height:39px; background:url(../images/navT.png) left -77px no-repeat; display:block;}
+#nav .n3 a:hover{ width:128px; height:39px; background:url(../images/navT.png) left -272px no-repeat; display:block;}
+#nav .n4 a{ width:122px; height:39px; background:url(../images/navT.png) left -117px no-repeat; display:block;}
+#nav .n4 a:hover{ width:122px; height:39px; background:url(../images/navT.png) left -312px no-repeat; display:block;}
+#nav .n5 a{ width:126px; height:39px; background:url(../images/navT.png) left -156px no-repeat; display:block;}
+#nav .n5 a:hover{ width:126px; height:39px; background:url(../images/navT.png) left -351px no-repeat; display:block;}
+
+/*主要内容左边内容 */
+.ImportBox{ width:1003px; margin:10px auto; overflow:hidden;}
+.ImportLeft{ width:236px; float:left;}
+.Vido{ width:236px; height:201px; margin-bottom:5px; background:url(../images/vido.jpg) left top no-repeat; text-align:center; padding-top:10px;}
+* html .Vido{ width:236px; margin-bottom:5px;}
+*+ html .Vido{ width:236px; margin-bottom:5px;}
+.latestNew{ width:236px;}
+#scroll{ width:236px; height:172px; padding-top:5px; background:url(../images/intelBg.gif) no-repeat; position:relative; overflow:hidden;}
+#scroll ul{ width:208px; height:155px; padding:0px 0 0 15px;}
+#scroll li{ background:url(../images/lico.gif) left 2px no-repeat; line-height:15px; margin:5px 0px 5px 0; padding:0 0 5px 20px; border-bottom:1px solid #e3e2e2; float:left; width:182px; clear:left;}
+#scroll .libg{ color:#FFF; color:#FFF;}
+#scroll span{ color:#2182ba; margin-left:10px;}
+#scroll a{ color:#6b6b6b; text-decoration:none;}
+#scroll a:hover{color:#0065b1; text-decoration:underline; cursor:pointer;}
+#scroll .libg a{ display:block; background:red; color:#FFF; border-radius:3px 3px 3px 3px;-moz-border-radius:3px 3px 3px 3px;-webkit-border-radius:3px 3px 3px 3px; padding:3px; width:170px;}
+
+.slider2{ position:absolute; top:4px; right:13px; background:transparent; height:155px; width:7px; z-index:1; background:url(../images/tl.gif) no-repeat;}
+.bar2{ cursor:pointer;}
+.scroll-list {overflow: hidden;position: absolute;z-index: 0;}
+
+.ImportRight{ width:1001px; float:right; }
+.ImportRightin{ width:758px; float:right; }
+
+.download{ background-color:#f7921e; }
+
+
+/* 月历 */
+.calenB{ width:236px; margin-bottom:10px;}
+.calenBT{ width:196px; height:34px; background:url(../images/calendart.jpg) no-repeat; line-height:34px; padding-left:40px; }
+.calenBT h3{font-family:"微软雅黑", "黑体"; font-size:20px; color:#8b8b8b;  }
+.calenBT h3 span{ color:#005daa;}
+.calenBIn{ width:234px; background:#fbfbfb; border:1px solid #dfdfdf; border-bottom:none; border-top:none; overflow:hidden; padding:4px 0 0 0;}
+.calenBIn li{ width:38px; text-align:center; font-size:14px; color:#a1a0a0; line-height:30px; float:left; font-family:Verdana, Geneva, sans-serif; }
+.calbor1{ border:1px solid #e7e7e7; border-left:none; border-top:none;}
+.calbor2{ border-bottom:1px solid #e7e7e7; }
+.calbor3{ border-right:1px solid #e7e7e7;}
+.calenBIn a{ color:#a1a0a0; text-decoration:none;}
+.calenBIn a:hover{ color:#0065b1; text-decoration:underline; cursor:pointer;}
+.calenBg{ background:#fc4100; padding:5px; color:#FFF!important; font-weight:bold;}
+
+/* footer */
+.footer{ border-top:3px solid #231f20; padding:10px 0 10px 0;}
+.footer span{ float:left; line-height:16px; padding-left:10px;}
+.footer img{ float:right;}

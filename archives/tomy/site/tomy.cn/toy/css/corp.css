@@ -1,0 +1,106 @@
+@charset "utf-8";
+
+/* ======================================= //
+
+	[ Table Of Contents]
+	------------------------->
+	[1] history
+	[2] profile
+	[3] activity
+	[4] network
+	[-] product serize
+
+
+
+
+	------------------------->
+	name:        corp.css
+	author:      Huang
+	date:        2011-08-23
+	lastUpdate : 2011-08-23
+
+// ========================================*/
+
+
+/*
+    [1] history
+---------------------------------------*/
+.corpCon{ border:1px solid #c3c6c9; background:#cae8f7 url(../images/gradiate_blue.png) left bottom repeat-x; border-radius:10px 10px 10px 10px;-webkit-border-radius:10px 10px 10px 10px;-moz-border-radius:10px 10px 10px 10px;-o-border-radius:10px 10px 10px 10px;-ms-border-radius:10px 10px 10px 10px; line-height:18px; padding:38px 0; position:relative;}
+.rc-tl,.rc-tr,.rc-bl,.rc-br{background:url(../images/r_corner.png) no-repeat \9; display:block; font-size:0; line-height:0; width:10px; height:10px; position:absolute;}
+.corpCon .rc-tl{ top:-1px; left:-1px;background-position:-10px 0\9;}
+.corpCon .rc-tr{top:-1px; right:-1px;background-position:0 0\9;_right:-2px; }
+.corpCon .rc-bl{bottom:-1px; left:-1px;background-position:-10px -10px\9;}
+.corpCon .rc-br{bottom:-1px; right:-1px;background-position:0 -10px\9;_right:-2px;}
+.con-wrapper{ width:760px;border-radius:10px 10px 10px 10px;-webkit-border-radius:6px 6px 6px 6px;-moz-border-radius:6px 6px 6px 6px;-o-border-radius:6px 6px 6px 6px;-ms-border-radius:6px 6px 6px 6px; background:#FFF; box-shadow:#c8e2ef 0px 2px 8px; float:right; margin-right:60px; display:inline;}
+.con-inner{padding:20px 40px;}
+.con-inner p{ margin-bottom:20px; line-height:22px; text-indent:2em;}
+.con-inner h2{ font-size:14px; font-weight:bold; text-align:center; margin-bottom:20px;}
+.cor-sub-menu{ float:left; padding-left:55px;width:95px;}
+.cor-sub-menu a{ display:block; background:url(../images/corp_menu.png) no-repeat; height:26px; text-indent:-9999px;}
+.cor-sub-menu .corp01 a{ background-position:0 0;}
+.cor-sub-menu .corp02 a{ background-position:0 -26px;}
+.cor-sub-menu .corp03 a{ background-position:0 -53px;}
+
+/*
+    [2] profile
+---------------------------------------*/
+.one-col{ float:none; margin:0 auto; display:block; width:800px;}
+.one-col2{ float:none; margin:0 auto; display:block; width:690px;}
+.profile{ padding:10px 0 30px 30px; line-height:20px;*padding-top:30px;}
+.profile h2{ background:url(../images/corp_ttl.png) no-repeat; height:30px; width:550px; line-height:30px; font-size:16px; font-weight:bold; color:#000; padding-left:40px; margin:20px 0;}
+.profile h3,.profile p,.profile ul,.profile blockquote,.profile dl{ padding-left:20px;}
+.profile h3{ font-size:14px; font-weight:bold; margin-bottom:10px;}
+.profile blockquote{ font-style:italic; font-size:14px; margin-bottom:20px; font-family:"微软雅黑";}
+.profile dl{ overflow:hidden;*zoom:1; margin-bottom:20px;}
+.profile dt{ float:left;clear:both; width:60px;}
+.profile dd{ float:left; width:700px;}
+.profile ul{ overflow:hidden;*zoom:1;}
+.profile ul li{ float:left; width:330px; height:80px; margin-right:20px;}
+.profile ul li em{ display:block;}
+.profile em{ border-bottom:2px solid #60adde;}
+
+/*
+    [3] activity
+---------------------------------------*/
+.activity{padding:30px;}
+.activity h2{ font-size:16px; font-weight:bold; margin-bottom:10px;}
+.activity h3{ background:#47aee1; height:30px; line-height:30px; font-size:14px; font-weight:bold; color:#FFF; padding-left:20px; margin-bottom:10px;}
+.activity .act-details{ padding-top:20px; margin-top:20px; border-top:1px solid #ccc;}
+.activity .act-details p{ margin-bottom:10px; text-indent:2em;}
+.activity a:hover{ color:#434343; text-decoration:none;}
+
+/*
+    [4] network
+---------------------------------------*/
+#netWork .con-wrapper{ margin-bottom:20px;}
+.network{ padding:30px;}
+.network h3{ margin:0 0 10px 0; clear:both;}
+.network ul{ line-height:20px; margin-bottom:10px;}
+.network h2{ font-size:16px; font-weight:bold; clear:both; margin-bottom:10px;}
+.distinct ul{ padding-bottom:5px; margin-bottom:10px; border-bottom:1px solid #ccc; overflow:hidden; *height:1%; line-height:18px;}
+.distinct ul.last-item{ border-bottom:0 none;}
+.distinct li{ float:left; margin-right:20px; margin-bottom:10px; display:inline;}
+.distinct li a,.network h3{ display:block; background:url(../images/area_bg.png) no-repeat; width:69px; height:18px; color:#FFF; text-align:center;}
+.distinct .section01{ float:left; width:360px;}
+.distinct img{ float:right;}
+
+/*
+    [-] product serize
+---------------------------------------*/
+.proSerize{ background:url(../images/gradiate_yellow_repeat.png) repeat-y top center; }
+.proSerize-top{ background:url(../images/gradiate_yellow.png) no-repeat top center;}
+.proSerize-bottom{ background:url(../images/gradiate_yellow.png) no-repeat bottom center; }
+
+
+.proSerize ul{ padding-left:50px;}
+* html .proSerize ul{ padding-left:23px;}
+.proSerize ul li{ float:left; width:245px; text-align:center; margin:35px 0 0 34px; }
+.proSerize ul li .link-btn{ background:url(../images/pro_serize.png) no-repeat -9999px 0; display:block; height:32px; margin:16px auto 0 auto;}
+.proSerize ul .serize01 .link-btn{ background-position:center 0; width:105px;}
+.proSerize ul .serize02 .link-btn{ background-position:center -32px; width:105px;}
+.proSerize ul .serize03 .link-btn{ background-position:center -64px; width:122px;}
+.proSerize ul .serize04 .link-btn{ background-position:center -96px; width:105px;}
+.proSerize ul .serize05 .link-btn{ background-position:center -128px; width:105px;}
+.proSerize ul .serize06 .link-btn{ background-position:center -160px; width:122px;}
+.proSerize ul .serize07 .link-btn{ background-position:center -192px; width:122px;}
+.proSerize ul .serize08 .link-btn{ background:url(../images/pro_serize_pet.png) no-repeat center center; display:block; height:32px; margin:16px auto 0 auto;}

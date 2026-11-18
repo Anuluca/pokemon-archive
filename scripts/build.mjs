@@ -12,6 +12,8 @@ const dist = path.join(root, 'dist');
 const collections = JSON.parse(await fs.readFile(path.join(root, 'collections.json'), 'utf8'));
 const toPosix = value => value.split(path.sep).join('/');
 const htmlEscape = value => String(value).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('"', '&quot;');
+const archiveStatement = '本站仅用于互联网失传媒体的保存与归档，不用于任何商业用途。';
+const projectLinks = '<a href="https://github.com/Anuluca/pokemon-archive">GitHub</a> · <a href="https://anuluca.com/">Anutrium</a>';
 
 async function filesIn(folder, relative = '') {
   const result = [];
@@ -42,14 +44,16 @@ for (const collection of collections) {
   const primaryDirectory = path.posix.dirname(homepage);
   const mapping = new Map();
   const restoration = await fs.readFile(path.join(source, 'restoration-2026-11-18.json'), 'utf8').then(JSON.parse).catch(() => ({records: []}));
-  const unavailable = new Set(restoration.records.filter(record => record.errors).map(record => {
+  const additional = await fs.readFile(path.join(source, 'additional-pages.json'), 'utf8').then(JSON.parse).catch(() => ({records: [], pages: []}));
+  const records = [...restoration.records, ...additional.records];
+  const unavailable = new Set(records.filter(record => record.errors || record.status === 'missing').map(record => {
     const url = new URL(record.url);
     return `site/${url.hostname}${url.pathname}`;
   }));
   function missingRestoredAsset(value, file) {
     const url = new URL(value, `https://archive.invalid/${file}`);
     const key = url.hostname === 'archive.invalid' ? url.pathname.slice(1) : `site/${url.hostname}${url.pathname}`;
-    return unavailable.has(key);
+    return unavailable.has(key) && !mapping.has(key);
   }
   for (const file of files) {
     let target;
@@ -74,9 +78,14 @@ for (const collection of collections) {
     try {
       decoded = decodeURIComponent(url.pathname.slice(1));
       if (url.hostname !== 'archive.invalid') {
+        // 查询参数属于原页面身份的一部分，例如 activity.php?id=48；本地文件名由来源清单确定。
+        const original = `http://${url.hostname}${url.pathname}${url.search}`;
+        const record = records.find(entry => entry.url === original);
+        const recordedTarget = record && mapping.get(record.placeholderPath || record.localPath || `site/${record.path}`);
+        if (recordedTarget) return `/${recordedTarget}${url.hash}`;
         decoded = `site/${url.hostname}/${decoded}`;
-        if (decoded.endsWith('.php')) decoded += '.html';
       }
+      if (decoded.endsWith('.php')) decoded += '.html';
     } catch { return value; }
     const target = mapping.get(decoded);
     return target ? `/${target}${url.search}${url.hash}` : value;
@@ -91,7 +100,7 @@ for (const collection of collections) {
     if (!file.startsWith('originals/') && /\.(?:html?|shtml|css|js)$/i.test(file)) {
       let text = await fs.readFile(path.join(source, file), 'utf8');
       if (text.includes('\0')) throw new Error(`Invalid text encoding: ${file}`);
-      if (file.startsWith('site/www.tomy.cn/')) {
+      if (/^site\/(?:www\.)?tomy\.cn\//.test(file)) {
         // 未取回的装饰图不制造假原件。缺失状态保留在补充来源记录中，发布副本用文字控件降级。
         if (file.endsWith('.css')) text = text.replace(/url\(\s*(['"]?)([^)'"\s]+)\1\s*\)/gi,
           (match, quote, value) => missingRestoredAsset(value, file) ? 'none' : match);
@@ -118,6 +127,16 @@ for (const collection of collections) {
         (_, quote, value) => `${quote}${rewriteReference(value, file)}${quote}`);
       if (/\.(?:html?|shtml)$/i.test(file)) {
         let formPolicy = '';
+        if (additional.pages.some(page => page.localPath === file)) {
+          // 统计脚本和 Adobe 插件安装器不属于历史正文；Flash 由共用的 Ruffle 兼容层接管。
+          text = text.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, script =>
+            /piwikTracker|_gaq|swffix_modified\.js|SWFFix\.registerObject/.test(script) ? '' : script);
+          text = text.replace(/<img\b[^>]*src=["']https?:\/\/www\.adobe\.com\/[^"']*get_flash_player\.gif["'][^>]*>/gi, '');
+          text = text.replace(/href=(["'])https?:\/\/(?:www\.)?tomy\.cn\/toy\/pokemon\/index\.php\1/gi, `href="/${slug}/"`);
+          // 原图未取回的活动按钮使用文字控件，仍能进入真实保存的答题页。
+          text = text.replace(/<img\b[^>]*src=["'][^"']*dianjicanjia\.jpg(?:\.missing\.svg)?["'][^>]*>/gi,
+            '<span class="archive-enter-event">点击参加</span>');
+        }
         // 退役的腾讯迷你导航完全从可浏览副本中移除，动态插入脚本也一并处理。
         text = text.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, script =>
           script.includes('mi.MiniNav_110901V1') ? '' : script);
@@ -125,6 +144,14 @@ for (const collection of collections) {
           // 首页底部的“有奖竞猜”图片原先指向介绍文章，现接通用户提供的实际答题页。
           text = text.replace(/<a\b[^>]*>\s*(<img\b[^>]*src=["'][^"']*\/ivent\.jpg["'][^>]*>)\s*<\/a>/gi,
             `<a href="/${slug}/pages/www.tomy.cn/toy/pokemon/events/step1.php.html">$1</a>`);
+          // 补充页面单独列出，不改变历史页面中的原始导航和版权栏。
+          const extraLinks = additional.pages.map(page => {
+            const destination = mapping.get(page.localPath);
+            if (!destination) throw new Error(`Additional archive page missing: ${page.localPath}`);
+            return `<a href="/${destination}${page.fragment ? `#${htmlEscape(page.fragment)}` : ''}">${htmlEscape(page.title)}</a>`;
+          }).join('');
+          const footer = `<aside class="archive-supplement" aria-label="补充归档页面"><nav aria-label="补充页面链接">${extraLinks}</nav><footer><p>${archiveStatement}</p><p>${projectLinks}</p></footer></aside>`;
+          text = text.replace(/<\/body>/i, footer + '</body>');
         }
         if (/site\/www\.tomy\.cn\/toy\/pokemon\/(?:events\/)?step1\.php\.html$/.test(file)) {
           formPolicy = "; form-action 'none'";
@@ -167,7 +194,7 @@ const links = collections.map(c => `<li><a href="/${c.slug}/">${htmlEscape(c.tit
 await fs.writeFile(path.join(dist, 'index.html'), `<!doctype html>
 <html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>宝可梦网站归档</title><style>body{max-width:760px;margin:10vh auto;padding:24px;font:16px/1.7 system-ui;color:#1f2937}h1{font-size:30px}ul{padding:0;list-style:none}li{padding:24px 0;border-bottom:1px solid #ddd}a{color:#0759ad}span{display:block;color:#666;font-size:14px}footer{margin-top:40px;font-size:13px;color:#666}</style>
-<h1>宝可梦网站归档</h1><ul>${links}</ul><footer>历史网站静态归档。原站图片与内容的权利归原权利人所有。<br><a href="https://github.com/Anuluca/pokemon-archive">GitHub 仓库</a></footer></html>`);
+<h1>宝可梦网站归档</h1><ul>${links}</ul><footer>${archiveStatement}<br>原站图片与内容的权利归原权利人所有。<br>${projectLinks}</footer></html>`);
 await fs.writeFile(path.join(dist, '404.html'), '<!doctype html><meta charset="utf-8"><title>未找到归档页面</title><h1>未找到归档页面</h1><p><a href="/">返回归档目录</a></p>');
 await fs.writeFile(path.join(dist, 'build-summary.json'), JSON.stringify(summary, null, 2));
 console.log(JSON.stringify(summary, null, 2));

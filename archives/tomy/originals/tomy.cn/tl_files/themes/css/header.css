@@ -1,0 +1,341 @@
+/*-------------------------------------------
+		[ header ]
+------------------------------------------- */
+.invisible {
+width: 0;
+height: 0;
+left: -1000px;
+top: -1000px;
+position: absolute;
+overflow: hidden;
+display: inline;
+}
+
+#header.header {
+	position: absolute;
+	left:0;
+	top:0;
+	width:100%;
+	min-width: 1000px;
+	z-index: 99;
+	padding-bottom: 7px;
+	background:#fff url(../images/header/header_shadow_top.png) left bottom repeat-x;
+	font-family: 'Microsoft YaHei', '微软雅黑', SimSun, Arial, Helvetica, sans-serif;
+}
+*html #header.header {
+	padding-bottom: 0;
+	background: none;
+}
+
+#header.header .inside {
+	position: relative;
+	width: 1000px;
+	height: 120px;
+	margin: 0 auto;
+}
+
+/*-------------------------------------------
+		[ header - logo and tmall logo ]
+------------------------------------------- */
+#logo {
+	display: block;
+	position: absolute;
+	width:114px;
+	height:88px;
+	left: 0;
+	top:18px;
+}
+#logo img {
+	display: block;
+}
+
+#tmall {
+	display:block;
+	position:absolute;
+	left:500px;
+	top:0;
+	z-index:200;
+}
+#tmall a {
+	display:block;
+}
+
+/*-------------------------------------------
+		[ header - brands ]
+------------------------------------------- */
+.ce_text_header_brands {
+	position: absolute;
+	left: 120px;
+	top:0;
+	width:930px;
+	z-index: 199;
+}
+
+#header.header .ce_text_header_brands h1 {
+	font-size: 14px;
+	font-weight: bold;
+	width:145px;
+	height: 52px;
+	line-height: 52px;
+	text-align: center;
+	letter-spacing: 5px;
+	margin: 0 0 0 60px;
+	color:#fff;
+	background: #82c340;
+
+	border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;
+}
+.ce_text_header_brands h1.js {
+	cursor: pointer;
+}
+.ce_text_header_brands h1.expanded {
+	border-bottom-left-radius: 0;
+	border-bottom-right-radius: 0;
+}
+
+.ce_text_header_brands .brands_popup {
+	display: none;
+	border:1px #82c340 solid;
+	overflow: hidden;
+
+	border-radius: 10px;
+}
+
+.ce_text_header_brands h2 {
+	color:#333;
+	font-size: 16px;
+	font-weight: bold;
+}
+
+.ce_text_header_brands table {
+	width:100%;
+	margin: 0;
+	border-collapse: collapse;
+	background: #fff;
+}
+
+.ce_text_header_brands table td{
+	padding:0;
+	vertical-align: top;
+}
+.ce_text_header_brands table td table td{
+	padding:15px 5px;
+	vertical-align: middle;
+}
+
+.ce_text_header_brands table td a,
+.ce_text_header_brands table td img {
+	display: block;
+}
+.ce_text_header_brands table td img {
+	margin: 0 auto;
+}
+
+/*-------------------------------------------
+		[ header - main menu - level 1 ]
+------------------------------------------- */
+.mainnav {
+	position: absolute;
+	left: 140px;
+	bottom:10px;
+	overflow: visible !important;
+}
+
+.mainnav ul {
+	margin: 0;
+	padding:0;
+}
+
+.mainnav ul.level_1 {
+	display: block;
+}
+
+.mainnav li {
+	display: block;
+	float: left;
+	padding: 0 2px;
+	background: url(../images/main/bg_menu_separator.gif) right center no-repeat;
+}
+.mainnav li.last {
+	background: none;
+}
+.mainnav li li {
+	float: none;
+	padding: 0;
+	background: none;
+}
+
+.mainnav li.submenu {
+	position: relative;
+}
+.mainnav li.submenu li.submenu {
+	position: static;
+}
+
+
+.mainnav li a,
+.mainnav li span {
+	display: block;
+	float: left;
+	padding: 3px 20px;
+	color:#005ba4;
+	font-size: 14px;
+	font-weight: bold;
+	height: 30px;
+	line-height: 30px;
+
+	border: 5px transparent solid;
+	border-bottom: 0;
+}
+*html .mainnav li a,
+*html .mainnav li span {
+	border-color:#fff;
+}
+.mainnav li li a,
+.mainnav li li span {
+	float: none;
+	border: 0;
+}
+
+.mainnav li a.active,
+.mainnav li a.trail,
+.mainnav li span.active,
+.mainnav li span.trail {
+	color:#003e6f;
+}
+
+
+.mainnav a.hover,
+.mainnav span.hover {
+	border-color:#005ba4;
+	background: #fff;
+	position: relative;
+	z-index: 99;
+	border-top-left-radius: 20px;
+	border-top-right-radius: 20px;
+}
+
+
+
+
+
+
+.mainnav li.submenu ul.level_2 {
+	display: none;
+	position: absolute;
+	left: 2px;
+	top:36px;
+	width:150%;
+	z-index: 98;
+	background: #fff;
+	border: 5px #005ba4 solid;
+	overflow: hidden;
+
+	border-top-right-radius: 20px;
+	border-bottom-left-radius: 20px;
+	border-bottom-right-radius: 20px;
+
+	box-shadow: 2px 2px 2px rgba(51,51,51,0.5);
+}
+.mainnav li.submenu.yingtong  ul.level_2{
+	width:170%;
+}
+
+.mainnav li.submenu ul.level_2 li {
+	overflow: hidden;
+}
+
+/*-------------------------------------------
+		[ cornernav ]
+------------------------------------------- */
+.cornernav {
+	position: absolute;
+	right:0;
+	bottom:10px;
+
+	display: block;
+	overflow: hidden;
+}
+
+.cornernav ul {
+	display: block;
+	overflow: hidden;
+	margin: 0;
+}
+
+.cornernav ul li {
+	display: block;
+	float: left;
+}
+.cornernav ul li.jp{
+	background:url(../images/line.png) right 20px no-repeat;
+	margin-right:10px;
+	padding-right:10px;
+}
+
+.cornernav ul li a,
+.cornernav ul li span
+{
+	display: block;
+	float: left;
+	color:#82c340;
+	font-size: 12px;
+	height: 30px;
+	line-height: 30px;
+	padding-top:12px;
+}
+.cornernav ul li.jp a{
+	background:url(../images/jp.png) 50% top no-repeat;
+}
+.cornernav ul li.usa a{
+	background:url(../images/usa.png) 50% top no-repeat;
+}
+
+.head-weibo{
+	position: absolute;
+	right: 0;
+	top: 20px;
+}
+
+.head-weibo.toy,
+.head-weibo.yunma{
+	position: absolute;
+	right: 35px;
+	padding-left:30px;
+	background:url(../images/sina-weibo.png) left center no-repeat;
+	z-index:200;
+	font-size: 12px;
+	color: #005ca6;
+	text-decoration: none;
+}
+.head-weibo.toy{
+	top: 10px;
+}
+.head-weibo.yunma{
+	top: 35px;
+}
+/*-------------------------------------------
+		[ follownav ]
+------------------------------------------- */
+.follownav {
+	position: absolute;
+	left: 280px;
+	top: 0;
+	width: 145px;
+	height: 52px;
+	line-height: 52px;
+	letter-spacing: 5px;
+	margin: 0 0 0 60px;
+	text-align: center;
+	font-size: 14px;
+	font-weight: bold;
+	color: #fff;
+	background: #fe9400;
+	border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;
+	z-index: 199;
+}
+.follownav:hover{
+	text-decoration: none;
+}
