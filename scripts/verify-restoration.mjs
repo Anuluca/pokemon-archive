@@ -65,3 +65,15 @@ for (const match of jiewai.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)) 
   if (match[2].trim() && !/type=["']application\//.test(match[1])) new Script(match[2]);
 }
 console.log('Verified Jiewai collection, six gallery entries and executable JavaScript syntax.');
+
+// 不同页面必须保留各自的时间，不能将首页时间套用到整个集合。
+for (const [file, stamp] of [
+  ['tomy/index.html', '2015-03-17 21:52:04'],
+  ['tomy/bw.htm', '2015-04-21 19:22:58'],
+  ['jiewai/index.html', '2019-03-05 20:05:02'],
+  ['tomy/pages/www.tomy.cn/toy/pokemon/events/step1.php.html', '2013-03-25 00:11:36']
+]) {
+  const text = await fs.readFile(new URL(`../dist/${file}`, import.meta.url), 'utf8');
+  assert(text.includes(`<p class="archive-snapshot">快照时间：${stamp}（UTC）。</p>`), `${file}: snapshot timestamp incorrect`);
+}
+console.log('Verified per-page snapshot timestamps in UTC.');

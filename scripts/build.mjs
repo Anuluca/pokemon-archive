@@ -49,6 +49,15 @@ for (const collection of collections) {
   const collectionManifest = collection.manifest
     ? JSON.parse(await fs.readFile(path.join(source, collection.manifest), 'utf8')) : {records: []};
   const records = [...restoration.records, ...additional.records, ...collectionManifest.records];
+  // 原始清单存在两种字段格式；日期只取该 HTML 自身的来源，不借用首页或图片的时间。
+  const originalManifest = JSON.parse(await fs.readFile(path.join(source, 'manifest.json'), 'utf8'));
+  const snapshotRecords = [...Object.values(originalManifest.records || {}), ...records];
+  function snapshotNote(file) {
+    const record = snapshotRecords.find(entry => (entry.localPath || entry.local_path || (entry.path && `site/${entry.path}`)) === file);
+    const stamp = (record?.source || record?.source_url || '').match(/\/web\/(\d{14})/)?.[1];
+    if (!stamp) return file.startsWith('site/') ? '快照时间：来源未记录或未取回。' : '本页为归档资料索引，无对应历史快照。';
+    return `快照时间：${stamp.slice(0,4)}-${stamp.slice(4,6)}-${stamp.slice(6,8)} ${stamp.slice(8,10)}:${stamp.slice(10,12)}:${stamp.slice(12,14)}（UTC）。`;
+  }
   const unavailable = new Set(records.filter(record => record.errors || record.status === 'missing').map(record => {
     const url = new URL(record.url);
     return `site/${url.hostname}${url.pathname}`;
@@ -212,6 +221,11 @@ for (const collection of collections) {
         const compatibility = `<meta http-equiv="Content-Security-Policy" content="${policy}"><link rel="stylesheet" href="/shared/archive-runtime.css"><script src="/shared/archive-runtime.js" data-archive-collection="${slug}" defer></script>`;
         text = text.replace(/<head\b[^>]*>/i, match => match + compatibility);
         if (!/<head\b/i.test(text)) text = compatibility + text;
+        const snapshot = `<p class="archive-snapshot">${snapshotNote(file)}</p>`;
+        // 专题首页已有页脚容器；放入其中，避免杰外旧主题的固定侧栏遮挡新增文字。
+        if (text.includes('class="archive-supplement"')) text = text.replace(/(<aside class="archive-supplement"[\s\S]*?)(<\/footer>)/, `$1${snapshot}$2`);
+        else if (/<\/body>/i.test(text)) text = text.replace(/<\/body>/i, `${snapshot}</body>`);
+        else text += snapshot;
       }
       await fs.writeFile(target, text);
     } else await fs.copyFile(path.join(source, file), target);
@@ -228,7 +242,7 @@ const links = collections.map(c => `<li><a href="/${c.slug}/">${htmlEscape(c.tit
 await fs.writeFile(path.join(dist, 'index.html'), `<!doctype html>
 <html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>宝可梦网站归档</title><style>body{max-width:760px;margin:10vh auto;padding:24px;font:16px/1.7 system-ui;color:#1f2937}h1{font-size:30px}ul{padding:0;list-style:none}li{padding:24px 0;border-bottom:1px solid #ddd}a{color:#0759ad}span{display:block;color:#666;font-size:14px}footer{margin-top:40px;font-size:13px;color:#666}</style>
-<h1>宝可梦网站归档</h1><ul>${links}</ul><footer>${archiveStatement}<br>原站图片与内容的权利归原权利人所有。<br>${projectLinks}</footer></html>`);
-await fs.writeFile(path.join(dist, '404.html'), '<!doctype html><meta charset="utf-8"><title>未找到归档页面</title><h1>未找到归档页面</h1><p><a href="/">返回归档目录</a></p>');
+<h1>宝可梦网站归档</h1><ul>${links}</ul><footer>${archiveStatement}<br>原站图片与内容的权利归原权利人所有。<br>${projectLinks}<p class="archive-snapshot">本页为归档目录，无对应历史快照。</p></footer></html>`);
+await fs.writeFile(path.join(dist, '404.html'), '<!doctype html><meta charset="utf-8"><title>未找到归档页面</title><h1>未找到归档页面</h1><p><a href="/">返回归档目录</a></p><p class="archive-snapshot">本页为错误提示，无对应历史快照。</p>');
 await fs.writeFile(path.join(dist, 'build-summary.json'), JSON.stringify(summary, null, 2));
 console.log(JSON.stringify(summary, null, 2));

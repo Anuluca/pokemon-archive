@@ -26,3 +26,6 @@
 /* 原站的 a:link/a:visited 在页面后部声明，显式保留新增导航的链接颜色与下划线。 */
 .archive-supplement a:link,.archive-supplement a:visited{color:#075f96;text-decoration:underline}
 .archive-supplement .archive-nav-label{flex-shrink:0;font-weight:600;text-align:left}
+/* 时间戳采用 Wayback 的 UTC 时间；独立一行并清除旧站浮动布局。 */
+.archive-snapshot{clear:both;display:block;position:relative;box-sizing:border-box;width:auto;max-width:960px;margin:20px auto;padding:8px 12px;text-align:center;font:12px/1.6 system-ui,sans-serif;color:#555;background:#fff}
+.archive-supplement .archive-snapshot{margin:8px 0 0;padding:0;background:transparent}
